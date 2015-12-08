@@ -11,10 +11,10 @@ def parseNames(line):
     fields = line.split('\"')
     return (int(fields[0]), fields[1].encode("utf8"))
 
-names = sc.textFile("file:///SparkCourse/marvel-names.txt")
+names = sc.textFile("Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvel-names.txt")
 namesRdd = names.map(parseNames)
 
-lines = sc.textFile("file:///SparkCourse/marvel-graph.txt")
+lines = sc.textFile("Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvel-graph.txt")
 
 pairings = lines.map(countCoOccurences)
 totalFriendsByCharacter = pairings.reduceByKey(lambda x, y : x + y)
