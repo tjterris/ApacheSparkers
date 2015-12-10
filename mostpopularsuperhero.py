@@ -11,16 +11,17 @@ def parseNames(line):
     fields = line.split('\"')
     return (int(fields[0]), fields[1].encode("utf8"))
 
-names = sc.textFile("Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvel-names.txt")
+names = sc.textFile("/Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvelnames.txt")
 namesRdd = names.map(parseNames)
 
-lines = sc.textFile("Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvel-graph.txt")
+lines = sc.textFile("/Users/tjterris/Developer/spark-1.5.2-bin-hadoop2.6/marvelgraph.txt")
 
 pairings = lines.map(countCoOccurences)
+
 totalFriendsByCharacter = pairings.reduceByKey(lambda x, y : x + y)
 flipped = totalFriendsByCharacter.map(lambda (x,y) : (y,x))
 
-mostPopular = flipped.max()
+mostPopular = flipped.min()
 
 mostPopularName = namesRdd.lookup(mostPopular[1])[0]
 
